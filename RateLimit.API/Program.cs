@@ -31,6 +31,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseIpRateLimiting();
+
+var ipPolicyStore = app.Services.GetRequiredService<IIpPolicyStore>();
+ipPolicyStore.SeedAsync().GetAwaiter().GetResult();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
