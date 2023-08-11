@@ -6,8 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOptions();
 builder.Services.AddMemoryCache();
-builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
-builder.Services.Configure<IpRateLimitPolicies>(builder.Configuration.GetSection("IpRateLimitPolicies"));
+//builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
+//builder.Services.Configure<IpRateLimitPolicies>(builder.Configuration.GetSection("IpRateLimitPolicies"));
+
+builder.Services.Configure<ClientRateLimitOptions>(builder.Configuration.GetSection("ClientRateLimiting"));
+builder.Services.Configure<ClientRateLimitPolicies>(builder.Configuration.GetSection("ClientRateLimitPolicies"));
+
 
 builder.Services.AddInMemoryRateLimiting();
 //builder.Services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
@@ -30,10 +34,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseIpRateLimiting();
-
-var ipPolicyStore = app.Services.GetRequiredService<IIpPolicyStore>();
-ipPolicyStore.SeedAsync().GetAwaiter().GetResult();
+//app.UseIpRateLimiting();
+app.UseClientRateLimiting();
+//var ipPolicyStore = app.Services.GetRequiredService<IIpPolicyStore>();
+//ipPolicyStore.SeedAsync().GetAwaiter().GetResult();
 
 app.UseHttpsRedirection();
 
